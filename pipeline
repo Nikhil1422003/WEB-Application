@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/your-repo/your-web-app.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'echo Building...'
+                // Add build steps if needed
+            }
+        }
+        stage('Deploy') {
+            steps {
+                withAWS(region: 'us-east-1', credentials: 'aws-credentials') {
+                    sh 'aws deploy create-deployment --application-name your-app --deployment-group-name your-deployment-group --s3-location bucket=my-bucket,key=my-app.zip,bundleType=zip'
+                }
+            }
+        }
+    }
+}
